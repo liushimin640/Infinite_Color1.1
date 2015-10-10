@@ -1,26 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#e3e3e3">
 
-
-    <ImageButton
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/infinite_color"
-        android:layout_width="256dp"
-        android:layout_height="256dp"
-        android:scaleType="fitCenter"
-        android:layout_alignBottom="@+id/textView"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:text="@string/app_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="200dp"
-        android:id="@+id/textView" />
 
 </RelativeLayout>
