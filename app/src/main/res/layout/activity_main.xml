@@ -6,6 +6,4 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:background="#e3e3e3">
-
-
 </RelativeLayout>
