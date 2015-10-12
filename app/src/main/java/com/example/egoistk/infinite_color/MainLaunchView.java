@@ -40,7 +40,13 @@ public class MainLaunchView extends LaunchView{
 				}
 				for(ColorfulPix child : pixBox){
 					if(child.isOnActive()){
-						child.setX(child.getX()+5);
+						if(child.getX()<0||child.getX()>500){
+							child.rebound(true,false);
+						}
+						if(child.getY()<0||child.getY()>500){
+							child.rebound(false,true);
+						}
+						child.move();
 					}
 				}
 				draw();

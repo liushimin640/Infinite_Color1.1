@@ -13,6 +13,9 @@ public class ColorfulPix extends Container{
 	private boolean onBomb;
 	private DrawBombThread dbThread = null;
 
+	private float cos,sin,r;
+
+
 	public ColorfulPix(float x,float y,float width,float height,int color) {
 		paint = new Paint();
 		setX(x);
@@ -22,6 +25,9 @@ public class ColorfulPix extends Container{
 		setColor(color);
 		onActive = true;
 		onBomb = false;
+		sin = (float)Math.random() * 2 - 1;
+		cos = (float)Math.random() * 2 - 1;
+		r = (float)Math.sqrt(sin*sin+cos*cos);
 	}
 
 
@@ -36,7 +42,7 @@ public class ColorfulPix extends Container{
 	}
 
 	public void drawOnActive(Canvas canvas){
-		canvas.drawRect(0,0,getWidth(),getHeight(),paint);
+		canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
 	}
 
 	public void drawOnBomb(Canvas canvas){
@@ -84,12 +90,24 @@ public class ColorfulPix extends Container{
 						Thread.currentThread().interrupt();
 					}
 					paint.setAlpha(a);
-					canvas.drawRect(0,0,theWidth,theHeight,paint);
+					canvas.drawRect(0, 0, theWidth, theHeight, paint);
 					theWidth+=12.5;theHeight+=12.5;
 				}
 			}
 		}
 	}
+
+	public void move(){//k = (float)Math.random()   0-1
+		setX(getX() + 5 * cos / r);
+		setY(getY() + 5 * sin / r);
+	}
+
+	public void rebound(boolean shouldChgCos,boolean shouldChgSin){
+		if(shouldChgCos)cos = - cos;
+		if(shouldChgSin)sin = - sin;
+	}
+
+	//                                                        //GETSET
 
 	public int getColor() {
 		return color;
@@ -113,5 +131,29 @@ public class ColorfulPix extends Container{
 
 	public void setOnBomb(boolean onBomb) {
 		this.onBomb = onBomb;
+	}
+
+	public float getCos() {
+		return cos;
+	}
+
+	public void setCos(float cos) {
+		this.cos = cos;
+	}
+
+	public float getSin() {
+		return sin;
+	}
+
+	public void setSin(float sin) {
+		this.sin = sin;
+	}
+
+	public float getR() {
+		return r;
+	}
+
+	public void setR(float r) {
+		this.r = r;
 	}
 }
