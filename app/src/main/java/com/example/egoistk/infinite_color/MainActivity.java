@@ -14,15 +14,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        root = new FrameLayout(this);
-        mainLaunchView = new MainLaunchView(this);
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);//隐藏标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
-        setContentView(root);
-        root.addView(mainLaunchView, FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT);
+        setContentView(R.layout.activity_main);
 
-
-        mainLaunchView.setOnClickListener(this);
 
     }
 

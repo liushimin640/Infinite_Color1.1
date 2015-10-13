@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -24,8 +25,8 @@ public class MainLaunchView extends LaunchView{
 
 
 
-	public MainLaunchView(Context context) {
-		super(context);
+	public MainLaunchView(Context context,AttributeSet attrs) {
+		super(context,attrs);
 		pixBox = new PixBox();
 		moveThread = new MoveThread();
 		td = new Thread(moveThread);

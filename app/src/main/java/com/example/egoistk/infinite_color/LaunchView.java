@@ -3,6 +3,7 @@ package com.example.egoistk.infinite_color;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -12,12 +13,13 @@ import android.view.SurfaceView;
  */
 public class LaunchView extends SurfaceView implements Callback{
 	public Container root;
-	public LaunchView(Context context) {
-		super(context);
+	public LaunchView(Context context,AttributeSet attrs) {
+		super(context,attrs);
 		root = new Container();
 		getHolder().addCallback(this);
 
 	}
+
 
 	public void draw(){
 		Canvas canvas = getHolder().lockCanvas();
