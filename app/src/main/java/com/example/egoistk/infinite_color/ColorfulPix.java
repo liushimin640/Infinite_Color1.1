@@ -2,6 +2,9 @@ package com.example.egoistk.infinite_color;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.provider.Settings;
+
+import java.util.logging.XMLFormatter;
 
 /**
  * Created by liushimin on 15/10/11.
@@ -11,100 +14,123 @@ public class ColorfulPix extends Container{
 	private int color;
 	private boolean onActive;
 	private boolean onBomb;
+	public String className ;
+	public ColorfulPix me;
 	private DrawBombThread dbThread = null;
 
 	private float cos,sin,r;
 
 
-	public ColorfulPix(float x,float y,float width,float height,int color) {
+	public ColorfulPix(double x,double y,double width,double height,int color) {
+		super();
+		className = "pix";
 		paint = new Paint();
+		this.height = height;
+		this.width = width;
 		setX(x);
 		setY(y);
-		setHeight(height);
-		setWidth(width);
 		setColor(color);
 		onActive = true;
 		onBomb = false;
 		sin = (float)Math.random() * 2 - 1;
 		cos = (float)Math.random() * 2 - 1;
 		r = (float)Math.sqrt(sin*sin+cos*cos);
+		me = this;
 	}
 
 
 	@Override
 	public void costomChildren(Canvas canvas) {
 		super.costomChildren(canvas);
-		if(isOnActive()){
-			drawOnActive(canvas);
-		}else {
-			drawOnBomb(canvas);
-		}
+		canvas.drawRect(0, 0, (float)getWidth(), (float)getHeight(), paint);
 	}
 
-	public void drawOnActive(Canvas canvas){
-		canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
+	public void drawOnActive(){
+		canvas.drawRect(0, 0, (float)getWidth(), (float)getHeight(), paint);
 	}
 
-	public void drawOnBomb(Canvas canvas){
-		dbThread = new DrawBombThread(canvas);
-		new Thread(dbThread).start();
+	public void drawOnBomb(int a){
+		new Thread(new DrawBombThread(a)).start();
 	}
 
 
-	private class DrawBombThread implements Runnable {
-		public Canvas canvas;
-		private int a;
-		public DrawBombThread(Canvas canvas) {
-			this.canvas = canvas;
-			a = 50;
+	public class DrawBombThread implements Runnable {
+			int a;
+		public DrawBombThread(int a) {
+			this.a = a;
 		}
 
 		@Override
 		public void run() {
-			for(int i = 0;i<5;i++){
+			ColorfulPix childPix = new ColorfulPix(0, 0, 50, 50, getColor());
+			while (getWidth()<130 - a / 2){
+				try{
+					Thread.sleep(10);
+				}catch (Exception e) {
+					Thread.currentThread().interrupt();
+				}
+				synchronized (childPix){
+
+
+					if(getWidth() == 50){
+						addChild(childPix);
+						childPix.setOnBomb(true);
+					}
+					enlargeView(10, 10);
+					if(getWidth() == 70){
+						childPix.drawOnBomb(a + 40);
+					}
+					paint.setAlpha(a);
+				}
+			}
+
+			try{
+				Thread.sleep(1000);
+			}catch (Exception e) {
+				Thread.currentThread().interrupt();
+			}
+			while (getWidth() >=0) {
 				try {
-					Thread.sleep(200);
+					Thread.sleep(20);
 				} catch (Exception e) {
 					Thread.currentThread().interrupt();
 				}
-
-				new Thread(new DrawBombCellThread(canvas)).start();
-				a +=50 ;
-			}
-		}
-		private class DrawBombCellThread implements Runnable{
-			public Canvas canvas;
-			private float theWidth = 0,theHeight = 0;
-
-
-			public DrawBombCellThread(Canvas canvas) {
-				this.canvas = canvas;
-			}
-
-			@Override
-			public void run() {
-				while (isOnBomb()){
-					try{
-						Thread.sleep(100);
-					}catch (Exception e) {
-						Thread.currentThread().interrupt();
+				synchronized (me) {
+					if (me != null)
+						enlargeView(-10, -10);
+					if (getWidth() == 0) {
 					}
-					paint.setAlpha(a);
-					canvas.drawRect(0, 0, theWidth, theHeight, paint);
-					theWidth+=12.5;theHeight+=12.5;
 				}
 			}
+			if(parent!=null)
+			parent.removeChild(me);
+		}
+
+	}
+
+	public class RemoveThread implements Runnable{
+		public RemoveThread() {
+		}
+
+		@Override
+		public void run() {
+			System.out.println(Thread.currentThread().getName()+"done!");
 		}
 	}
 
 	public void move(){//k = (float)Math.random()   0-1
-		setX(getX() + 5 * cos / r);
-		setY(getY() + 5 * sin / r);
+		setX(getX() + 10 * cos / r);
+		setY(getY() + 10 * sin / r);
 	}
 
 	public void rebound(boolean shouldChgCos,boolean shouldChgSin){
 		if(shouldChgCos)cos = - cos;
 		if(shouldChgSin)sin = - sin;
+	}
+
+
+	public void removeThis() {
+		new Thread(new RemoveThread()).start();
 	}
 
 	//                                                        //GETSET
@@ -123,6 +149,7 @@ public class ColorfulPix extends Container{
 
 	public void setOnActive(boolean onActive) {
 		this.onActive = onActive;
+		this.onBomb = !onActive;
 	}
 
 	public boolean isOnBomb() {
@@ -151,6 +178,10 @@ public class ColorfulPix extends Container{
 
 	public float getR() {
 		return r;
+	}
+
+	public Paint getPaint() {
+		return paint;
 	}
 
 	public void setR(float r) {

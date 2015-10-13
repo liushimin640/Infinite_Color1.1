@@ -11,17 +11,20 @@ import android.view.SurfaceView;
  * Created by liushimin on 15/10/11.
  */
 public class LaunchView extends SurfaceView implements Callback{
-	private Container root;
+	public Container root;
 	public LaunchView(Context context) {
 		super(context);
 		root = new Container();
 		getHolder().addCallback(this);
+
 	}
 
 	public void draw(){
 		Canvas canvas = getHolder().lockCanvas();
 		if(canvas != null){
-			canvas.drawColor(Color.WHITE);
+			root.setWidth(canvas.getWidth());
+			root.setHeight(canvas.getHeight());
+			canvas.drawColor(getRoot().bkgColor);
 			root.draw(canvas);
 			getHolder().unlockCanvasAndPost(canvas);
 		}
