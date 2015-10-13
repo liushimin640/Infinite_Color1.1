@@ -26,6 +26,7 @@ public class LaunchView extends SurfaceView implements Callback{
 		if(canvas != null){
 			root.setWidth(canvas.getWidth());
 			root.setHeight(canvas.getHeight());
+
 			canvas.drawColor(getRoot().bkgColor);
 			root.draw(canvas);
 			getHolder().unlockCanvasAndPost(canvas);

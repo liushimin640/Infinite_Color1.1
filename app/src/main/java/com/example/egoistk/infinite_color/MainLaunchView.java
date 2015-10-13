@@ -49,15 +49,36 @@ public class MainLaunchView extends LaunchView{
 
 
 	public void Launch(){
-		draw();
-		testBox();
-		synchronized (pixBox) {
-			for (ColorfulPix child : pixBox) {
-				this.getRoot().addChild(child);
-			}
+		if(moveThread.isOnPause){
+			moveThread.isOnPause = false;
 		}
-		td.start();
-		hasLoaded = true;
+		else{
+			draw();
+			testBox();
+			root.circle = new Circle(Math.random()*getWidth(),Math.random()*getHeight(),0,0,root.rpaint.getColor());
+			synchronized (pixBox) {
+				for (ColorfulPix child : pixBox) {
+					this.getRoot().addChild(child);
+				}
+			}
+			td.start();
+			hasLoaded = true;
+		}
+	}
+
+	public void pause(){
+		moveThread.isOnPause = true;
+		pixBox = new PixBox();
+		moveThread = new MoveThread();
+		td = new Thread(moveThread);
+		setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				OnTouchView(event.getX(),event.getY());
+				hasLoaded = false;
+				return false;
+			}
+		});
 	}
 
 	public class BombThread implements Runnable {
@@ -73,7 +94,7 @@ public class MainLaunchView extends LaunchView{
 					child.setOnActive(false);
 					child.drawOnBomb(40);
 					try{
-						Thread.sleep((long)(Math.random()*50));
+						Thread.sleep((long)(Math.random()*5));
 					}catch (Exception e) {
 						Thread.currentThread().interrupt();
 					}
@@ -86,12 +107,21 @@ public class MainLaunchView extends LaunchView{
 	}
 
 	public class MoveThread implements Runnable {
+		public boolean isOnPause = false;
 		@Override
 		public void run() {
 			boolean hasReady = false;
 			while(!hasReady){
+				while(isOnPause){
+					try{
+						Thread.sleep(1000);
+					}catch (Exception e){
+						Thread.currentThread().interrupt();
+					}
+
+				}
 				try{
-					Thread.sleep(1);
+					Thread.sleep(50/3);
 				}catch (Exception e) {
 					Thread.currentThread().interrupt();
 				}
@@ -107,11 +137,9 @@ public class MainLaunchView extends LaunchView{
 						child.move();
 					}else {
 						i++;
-						if(!child.isOnBomb()){
-
-						}
+						System.out.println("开始了第"+i+"次爆炸");
 					}
-					if(i == pixBox.size())
+					if(i >= getRoot().children.size())
 						hasReady = true;
 				}
 				if(getRoot().circle.getWidth()<2000){
@@ -127,15 +155,27 @@ public class MainLaunchView extends LaunchView{
 				}
 
 				draw();
+				System.out.println("绘制1帧");
 			}
 
 
 
 			while(hasReady){
 				try{
-					Thread.sleep(1);
+					Thread.sleep(50/3);
 				}catch (Exception e) {
 					Thread.currentThread().interrupt();
+				}
+				if(getRoot().circle.getWidth()<2000){
+					getRoot().circle.width+=60;
+					getRoot().circle.height+=60;
+					/*getRoot().circle.x;
+					getRoot().circle.y-=3;*/
+				}
+				else{
+					getRoot().bkgColor = getRoot().rpaint.getColor();
+					if(getRoot().children.size() == 0)
+						hasReady = false;
 				}
 				draw();
 			}
@@ -144,22 +184,22 @@ public class MainLaunchView extends LaunchView{
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-
-	}
-
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		this.Launch();
 	}
 
 	@Override
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+	}
+
+	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		this.root = new Container();
+		pause();
 	}
 
 
 	public void testBox(){
-		for(int i = 0;i<3;i++){
+		for(int i = 0;i<30;i++){
 			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff880000));
 			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xffff0000));
 			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff00ff00));
