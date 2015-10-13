@@ -49,10 +49,7 @@ public class MainLaunchView extends LaunchView{
 
 
 	public void Launch(){
-		if(moveThread.isOnPause){
-			moveThread.isOnPause = false;
-		}
-		else{
+
 			draw();
 			testBox();
 			root.circle = new Circle(Math.random()*getWidth(),Math.random()*getHeight(),0,0,root.rpaint.getColor());
@@ -63,14 +60,16 @@ public class MainLaunchView extends LaunchView{
 			}
 			td.start();
 			hasLoaded = true;
-		}
+
 	}
 
 	public void pause(){
-		moveThread.isOnPause = true;
 		pixBox = new PixBox();
 		moveThread = new MoveThread();
 		td = new Thread(moveThread);
+		int color = root.bkgColor;
+		root = new Container();
+		root.bkgColor = color;
 		setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -79,6 +78,8 @@ public class MainLaunchView extends LaunchView{
 				return false;
 			}
 		});
+
+
 	}
 
 	public class BombThread implements Runnable {
