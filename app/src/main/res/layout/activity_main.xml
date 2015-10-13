@@ -6,10 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:background="#e3e3e3">
+
+
     <com.example.egoistk.infinite_color.MainLaunchView
         android:id="@+id/mainLaunch"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-
     </com.example.egoistk.infinite_color.MainLaunchView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/infinite"
+        android:id="@+id/btn_infinite"
+        android:layout_gravity="center"
+        android:layout_marginBottom="100dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/color"
+        android:id="@+id/btn_color"
+        android:layout_gravity="center" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/about"
+        android:id="@+id/btn_about"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"/>
+
+
 </FrameLayout>
