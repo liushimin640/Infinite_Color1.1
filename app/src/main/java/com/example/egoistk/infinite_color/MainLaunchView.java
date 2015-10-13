@@ -121,7 +121,7 @@ public class MainLaunchView extends LaunchView{
 				}
 				else{
 					getRoot().bkgColor = getRoot().rpaint.getColor();
-					getRoot().rpaint.setColor((int)(Math.random()*0x88888888));
+					getRoot().rpaint.setColor((int)(Math.random()*0x00888888)+0xff888888);
 					getRoot().circle = new Circle(Math.random()*getRoot().getWidth(),Math.random()*getRoot().getHeight(),0,0,getRoot().rpaint.getColor());
 				}
 
@@ -159,11 +159,11 @@ public class MainLaunchView extends LaunchView{
 
 	public void testBox(){
 		for(int i = 0;i<3;i++){
-			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff000000));
+			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff880000));
 			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xffff0000));
 			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff00ff00));
 			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff0000ff));
-			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff000000));
+			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff000088));
 		}
 	}
 	public PixBox getPixBox() {

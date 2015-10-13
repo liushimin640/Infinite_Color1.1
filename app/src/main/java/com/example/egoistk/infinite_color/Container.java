@@ -24,7 +24,7 @@ public class Container{
 		rpaint = new Paint();
 		rpaint.setColor((int)(Math.random()*0x88888888));
 		circle = new Circle(Math.random()*getWidth(),Math.random()*getHeight(),0,0,rpaint.getColor());
-		bkgColor = 0xff000000;
+		bkgColor = 0xffffffff;
 		parent = null;
 		className = null;
 	}
