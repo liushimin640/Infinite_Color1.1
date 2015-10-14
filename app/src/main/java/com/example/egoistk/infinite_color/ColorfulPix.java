@@ -2,6 +2,7 @@ package com.example.egoistk.infinite_color;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.provider.Settings;
 
 import java.util.logging.XMLFormatter;
@@ -12,24 +13,31 @@ import java.util.logging.XMLFormatter;
 public class ColorfulPix extends Container{
 	private Paint paint;
 	private int color;
-	private boolean onActive;
+	public boolean onActive;
 	private boolean onBomb;
 	public String className ;
 	public ColorfulPix me;
 	private DrawBombThread dbThread = null;
 
 	private float cos,sin,r;
+	public Circle c1,c2,c3,c4,c5;
 
-
-	public ColorfulPix(double x,double y,double width,double height,int color) {
+	public ColorfulPix(float x,float y,int color) {
 		super();
 		className = "pix";
 		paint = new Paint();
-		this.height = height;
-		this.width = width;
+		paint.setColor(color);
+		paint.setAlpha(255);
 		setX(x);
 		setY(y);
 		setColor(color);
+		c1 = new Circle(0,0,20);
+
+		c2 = new Circle(0,0,-40);
+		c3 = new Circle(0,0,-20);
+		c4 = new Circle(0,0,0);
+		c5 = new Circle(0,0,20);
+
 		onActive = true;
 		onBomb = false;
 		sin = (float)Math.random() * 2 - 1;
@@ -38,15 +46,65 @@ public class ColorfulPix extends Container{
 		me = this;
 	}
 
+	@Override
+	public void draw(Canvas canvas){
+
+		canvas.save();
+		System.out.println("开始绘制pix");
+		canvas.translate(getX(), getY());
+		System.out.println("pix画布就位,开始绘制pixCircle");
+		costomChildren(canvas);
+		System.out.println("pixCircle绘制完毕");
+
+		canvas.restore();
+	}
 
 	@Override
 	public void costomChildren(Canvas canvas) {
 		super.costomChildren(canvas);
-		canvas.drawRect(0, 0, (float)getWidth(), (float)getHeight(), paint);
+		if(onActive) {
+			canvas.drawCircle(0, 0, c1.width, paint);
+		}
+		else{
+
+			paint.setAlpha(50);
+			canvas.drawCircle(0, 0, c5.getWidth(), paint);
+			paint.setAlpha(100);
+			canvas.drawCircle(0, 0, c4.getWidth(), paint);
+			paint.setAlpha(150);
+			canvas.drawCircle(0, 0, c3.getWidth(), paint);
+			paint.setAlpha(200);
+			canvas.drawCircle(0, 0, c2.getWidth(), paint);
+			paint.setAlpha(250);
+			canvas.drawCircle(0, 0, c1.getWidth(), paint);
+			paint.setAlpha(255);
+		}
+		if(onActive){
+			if(x < 0 + c1.width || x > parent.width - c1.width){
+				rebound(true, false);
+			}
+			if(y < 0 + c1.width|| y > parent.height - c1.width){
+				rebound(false, true);
+			}
+			move();
+			if(parent.circle1.getWidth()*parent.circle1.getWidth() >= ((x-parent.circle1.x)*(x-parent.circle1.x)+(y-parent.circle1.y)*(y-parent.circle1.y))){
+				new Thread(new ChangeColorThread(parent.rpaint.getColor())).start();
+			}
+		}
 	}
 
-	public void drawOnActive(){
-		canvas.drawRect(0, 0, (float)getWidth(), (float)getHeight(), paint);
+
+	public class ChangeColorThread implements Runnable{
+		public int color;
+		public ChangeColorThread(int color) {
+			this.color = color;
+		}
+
+		@Override
+		public void run() {
+			paint.setColor(color);
+			paint.setAlpha(255);
+		}
 	}
 
 	public void drawOnBomb(int a){
@@ -62,47 +120,29 @@ public class ColorfulPix extends Container{
 
 		@Override
 		public void run() {
-			ColorfulPix childPix = new ColorfulPix(0, 0, 50, 50, getColor());
-			while (getWidth()<130 - a / 2){
+			while (c5.width <= 100){
 				try{
 					Thread.sleep(10);
 				}catch (Exception e) {
 					Thread.currentThread().interrupt();
 				}
-				synchronized (childPix){
-
-
-					if(getWidth() == 50){
-						addChild(childPix);
-						childPix.setOnBomb(true);
-					}
-					enlargeView(10, 10);
-					if(getWidth() == 70){
-						childPix.drawOnBomb(a + 40);
-					}
-					paint.setAlpha(a);
-				}
+				c5.width+=5;
+				c4.width+=5;
+				c3.width+=5;
+				c2.width+=5;
 			}
-
-			try{
-				Thread.sleep(1000);
-			}catch (Exception e) {
-				Thread.currentThread().interrupt();
-			}
-			while (getWidth() >=0) {
+			while (c5.width >= 0) {
 				try {
-					Thread.sleep(20);
+					Thread.sleep(10);
 				} catch (Exception e) {
 					Thread.currentThread().interrupt();
 				}
-				synchronized (me) {
-					if (me != null)
-						enlargeView(-10, -10);
-					if (getWidth() == 0) {
-					}
-				}
+				c5.width-=5;
+				c4.width-=5;
+				c3.width-=5;
+				c2.width-=5;
+				c1.width-=5;
 			}
-			if(parent!=null)
 			parent.removeChild(me);
 		}
 
@@ -118,9 +158,9 @@ public class ColorfulPix extends Container{
 		}
 	}
 
-	public void move(){//k = (float)Math.random()   0-1
-		setX(getX() + 10 * cos / r);
-		setY(getY() + 10 * sin / r);
+	public void move(){
+		x = (x + 20 * cos / r);
+		y = (y + 20 * sin / r);
 	}
 
 	public void rebound(boolean shouldChgCos,boolean shouldChgSin){

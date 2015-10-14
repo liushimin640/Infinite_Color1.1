@@ -1,9 +1,11 @@
 package com.example.egoistk.infinite_color;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -25,6 +27,7 @@ public class MainLaunchView extends LaunchView{
 
 
 
+
 	public MainLaunchView(Context context,AttributeSet attrs) {
 		super(context,attrs);
 		pixBox = new PixBox();
@@ -38,6 +41,10 @@ public class MainLaunchView extends LaunchView{
 				return false;
 			}
 		});
+		if(canvas!=null){
+			root.setWidth(canvas.getWidth());
+			root.setHeight(canvas.getHeight());
+		}
 	}
 
 	public void OnTouchView(float x,float y){
@@ -49,27 +56,22 @@ public class MainLaunchView extends LaunchView{
 
 
 	public void Launch(){
-
-			draw();
-			testBox();
-			root.circle = new Circle(Math.random()*getWidth(),Math.random()*getHeight(),0,0,root.rpaint.getColor());
-			synchronized (pixBox) {
-				for (ColorfulPix child : pixBox) {
-					this.getRoot().addChild(child);
-				}
-			}
-			td.start();
-			hasLoaded = true;
-
+		draw();
+		testBox();
+		root.circle1 = new Circle((float)(Math.random()*getWidth()),(float)(Math.random()*getHeight()),0);
+		root.circle2 = new Circle(root.circle1.getX(),root.circle1.getY(),-20);
+		for (ColorfulPix child : pixBox) {
+			this.getRoot().addChild(child);
+		}
+		td.start();
+		hasLoaded = true;
 	}
 
 	public void pause(){
 		pixBox = new PixBox();
 		moveThread = new MoveThread();
 		td = new Thread(moveThread);
-		int color = root.bkgColor;
 		root = new Container();
-		root.bkgColor = color;
 		setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -90,95 +92,56 @@ public class MainLaunchView extends LaunchView{
 		public void run() {
 			for(Iterator<ColorfulPix> it = getRoot().children.iterator();it.hasNext();){
 				ColorfulPix child = it.next();
-				synchronized (child){
-
-					child.setOnActive(false);
-					child.drawOnBomb(40);
-					try{
-						Thread.sleep((long)(Math.random()*5));
-					}catch (Exception e) {
-						Thread.currentThread().interrupt();
-					}
-				}
-
-			}
-
-		}
-
-	}
-
-	public class MoveThread implements Runnable {
-		public boolean isOnPause = false;
-		@Override
-		public void run() {
-			boolean hasReady = false;
-			while(!hasReady){
-				while(isOnPause){
-					try{
-						Thread.sleep(1000);
-					}catch (Exception e){
-						Thread.currentThread().interrupt();
-					}
-
-				}
+				child.setOnActive(false);
+				child.drawOnBomb(40);
 				try{
-					Thread.sleep(50/3);
+					Thread.sleep((long)(Math.random()*5));
 				}catch (Exception e) {
 					Thread.currentThread().interrupt();
 				}
-				int i = 0;
-				for(ColorfulPix child : getRoot().children){
-					if(child.isOnActive()){
-						if(child.getX() < 0 || child.getX() > getRoot().getWidth() - child.getWidth()){
-							child.rebound(true,false);
-						}
-						if(child.getY() < 0 || child.getY() > getRoot().getHeight() - child.getHeight()){
-							child.rebound(false,true);
-						}
-						child.move();
-					}else {
-						i++;
-						System.out.println("开始了第"+i+"次爆炸");
-					}
-					if(i >= getRoot().children.size())
-						hasReady = true;
-				}
-				if(getRoot().circle.getWidth()<2000){
-					getRoot().circle.width+=30;
-					getRoot().circle.height+=30;
-					/*getRoot().circle.x;
-					getRoot().circle.y-=3;*/
-				}
-				else{
-					getRoot().bkgColor = getRoot().rpaint.getColor();
-					getRoot().rpaint.setColor((int)(Math.random()*0x00888888)+0xff888888);
-					getRoot().circle = new Circle(Math.random()*getRoot().getWidth(),Math.random()*getRoot().getHeight(),0,0,getRoot().rpaint.getColor());
+			}
+		}
+	}
+
+	public class MoveThread implements Runnable {
+
+		@Override
+		public void run() {
+			int flag = 1;
+			boolean hasReady = false;
+			while(!hasReady){
+				long before = System.currentTimeMillis();
+				System.out.println("开始加载");
+
+				if(root.children.size() == 0) {
+					hasReady = true;
 				}
 
+				root.circleMove(50);
+
+				System.out.println("加载完成");
 				draw();
 				System.out.println("绘制1帧");
+				try{
+					Thread.sleep(1000/30-(System.currentTimeMillis()-before));
+				}catch (Exception e) {
+					Thread.currentThread().interrupt();
+				}
 			}
 
 
 
 			while(hasReady){
+				long before = System.currentTimeMillis();
+
+				if(root.children.size() == 0&&root.circleMove(100))
+					hasReady = false;
+				draw();
 				try{
-					Thread.sleep(50/3);
+					Thread.sleep(1000/30-(System.currentTimeMillis()-before));
 				}catch (Exception e) {
 					Thread.currentThread().interrupt();
 				}
-				if(getRoot().circle.getWidth()<2000){
-					getRoot().circle.width+=60;
-					getRoot().circle.height+=60;
-					/*getRoot().circle.x;
-					getRoot().circle.y-=3;*/
-				}
-				else{
-					getRoot().bkgColor = getRoot().rpaint.getColor();
-					if(getRoot().children.size() == 0)
-						hasReady = false;
-				}
-				draw();
 			}
 		}
 	}
@@ -200,12 +163,12 @@ public class MainLaunchView extends LaunchView{
 
 
 	public void testBox(){
-		for(int i = 0;i<30;i++){
-			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff880000));
-			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xffff0000));
-			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff00ff00));
-			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff0000ff));
-			pixBox.add(new ColorfulPix(Math.random()*(getRoot().getWidth() - 50),Math.random()*(getRoot().getHeight() - 50),50,50,0xff000088));
+		for(int i = 0;i<1;i++){
+			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 50)),(float)(Math.random()*(getRoot().getHeight() - 50)),0xffffffff));
+			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 50)),(float)(Math.random()*(getRoot().getHeight() - 50)),0xffffffff));
+			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 50)),(float)(Math.random()*(getRoot().getHeight() - 50)),0xffffffff));
+			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 50)),(float)(Math.random()*(getRoot().getHeight() - 50)),0xffffffff));
+			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 50)),(float)(Math.random()*(getRoot().getHeight() - 50)),0xffffffff));
 		}
 	}
 	public PixBox getPixBox() {

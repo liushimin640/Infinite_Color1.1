@@ -17,4 +17,5 @@ public class PixBox extends CopyOnWriteArrayList<ColorfulPix> {
 		room = 250;
 	}
 
+
 }

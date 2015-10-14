@@ -1,57 +1,41 @@
 package com.example.egoistk.infinite_color;
 
+import android.graphics.Paint;
+
 /**
  * Created by liushimin on 15/10/13.
  */
 public class Circle {
-	double x, y, width, height;
-	int color;
+	float x, y, width;
 
-	public Circle(double x, double y, double width, double heihgt, int color) {
+
+	public Circle(float x, float y, float width) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
-		this.height = heihgt;
-		this.color = color;
 	}
 
-	public double getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setX(double x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public double getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(double y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 
-	public double getWidth() {
+	public float getWidth() {
 		return width;
 	}
 
-	public void setWidth(double width) {
+	public void setWidth(float width) {
 		this.width = width;
-	}
-
-	public double getHeight() {
-		return height;
-	}
-
-	public void setHeight(double height) {
-		this.height = height;
-	}
-
-	public int getColor() {
-		return color;
-	}
-
-	public void setColor(int color) {
-		this.color = color;
 	}
 }

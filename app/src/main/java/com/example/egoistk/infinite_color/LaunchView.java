@@ -11,26 +11,36 @@ import android.view.SurfaceView;
 /**
  * Created by liushimin on 15/10/11.
  */
-public class LaunchView extends SurfaceView implements Callback{
+public class LaunchView extends SurfaceView implements Callback {
 	public Container root;
+	public Canvas canvas;
+	public SurfaceHolder surfaceHolder;
 	public LaunchView(Context context,AttributeSet attrs) {
-		super(context,attrs);
+		super(context, attrs);
 		root = new Container();
 		getHolder().addCallback(this);
+		surfaceHolder = getHolder();
 
 	}
 
 
-	public void draw(){
-		Canvas canvas = getHolder().lockCanvas();
-		if(canvas != null){
-			root.setWidth(canvas.getWidth());
-			root.setHeight(canvas.getHeight());
 
-			canvas.drawColor(getRoot().bkgColor);
+	public void draw(){
+		Canvas canvas = surfaceHolder.lockCanvas();
+		System.out.println("锁定画布");
+		if(canvas != null){
+			root.width = canvas.getWidth();
+			root.height = canvas.getHeight();
+			System.out.println("开始绘制");
+			canvas.drawColor(Color.WHITE);
+			System.out.println("背景绘制完成");
 			root.draw(canvas);
-			getHolder().unlockCanvasAndPost(canvas);
+			System.out.println("绘制结束");
+			surfaceHolder.unlockCanvasAndPost(canvas);
+			System.out.println("解锁画布");
+
 		}
+
 	}
 
 	public Container getRoot() {
@@ -44,7 +54,7 @@ public class LaunchView extends SurfaceView implements Callback{
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		draw();
+		draw(canvas);
 	}
 
 	@Override
