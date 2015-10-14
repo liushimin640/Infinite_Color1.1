@@ -49,7 +49,7 @@ public class MainLaunchView extends LaunchView{
 
 	public void OnTouchView(float x,float y){
 		if(hasLoaded){
-			new Thread(new BombThread()).start();
+			new Thread(new BombThread(this)).start();
 		}
 	}
 
@@ -85,12 +85,14 @@ public class MainLaunchView extends LaunchView{
 	}
 
 	public class BombThread implements Runnable {
-		public BombThread() {
+		public MainLaunchView mainLaunchView;
+		public BombThread(MainLaunchView mainLaunchView) {
+			this.mainLaunchView = mainLaunchView;
 		}
 
 		@Override
 		public void run() {
-			for(Iterator<ColorfulPix> it = getRoot().children.iterator();it.hasNext();){
+			for(Iterator<ColorfulPix> it = mainLaunchView.getRoot().children.iterator();it.hasNext();){
 				ColorfulPix child = it.next();
 				child.setOnActive(false);
 				child.drawOnBomb(40);
@@ -117,7 +119,7 @@ public class MainLaunchView extends LaunchView{
 					hasReady = true;
 				}
 
-				root.circleMove(25,hasReady);
+				root.circleMove(15,hasReady);
 
 				System.out.println("加载完成");
 				draw();
@@ -133,7 +135,7 @@ public class MainLaunchView extends LaunchView{
 
 			while(hasReady){
 				long before = System.currentTimeMillis();
-				if(root.circleMove(50,hasReady)){
+				if(root.circleMove(100,hasReady)){
 					hasReady = false;
 				}
 				draw();
@@ -164,11 +166,11 @@ public class MainLaunchView extends LaunchView{
 
 	public void testBox(){
 		for(int i = 0;i<1;i++){
-			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 50)),(float)(Math.random()*(getRoot().getHeight() - 50)),0xffffffff));
-			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 50)),(float)(Math.random()*(getRoot().getHeight() - 50)),0xffffffff));
-			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 50)),(float)(Math.random()*(getRoot().getHeight() - 50)),0xffffffff));
-			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 50)),(float)(Math.random()*(getRoot().getHeight() - 50)),0xffffffff));
-			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 50)),(float)(Math.random()*(getRoot().getHeight() - 50)),0xffffffff));
+			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 100)+50),(float)(Math.random()*(getRoot().getHeight() - 100)+50),0xffffffff));
+			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 100)+50),(float)(Math.random()*(getRoot().getHeight() - 100)+50),0xffffffff));
+			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 100)+50),(float)(Math.random()*(getRoot().getHeight() - 100)+50),0xffffffff));
+			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 100)+50),(float)(Math.random()*(getRoot().getHeight() - 100)+50),0xffffffff));
+			pixBox.add(new ColorfulPix((float)(Math.random()*(getRoot().getWidth() - 100)+50),(float)(Math.random()*(getRoot().getHeight() - 100)+50),0xffffffff));
 		}
 	}
 	public PixBox getPixBox() {

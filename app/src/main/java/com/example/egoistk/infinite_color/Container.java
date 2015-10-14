@@ -100,7 +100,7 @@ public class Container{
 		if(circle1.getWidth()>circle2.getWidth()){
 			circle1.width+=r;
 			circle2.width+=(r+circle1.width/1500);
-			rpaint1.setAlpha(rpaint1.getAlpha()-5);
+			rpaint1.setAlpha(rpaint1.getAlpha()-2);
 		}
 		else if(!hasReady){
 			circle1 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),0);
@@ -111,7 +111,7 @@ public class Container{
 		if(circle3.getWidth()>circle4.getWidth()){
 			circle3.width+=r;
 			circle4.width+=(r+circle1.width/1500);
-			rpaint2.setAlpha(rpaint2.getAlpha()-5);
+			rpaint2.setAlpha(rpaint2.getAlpha()-2);
 		}
 		else if(!hasReady){
 			circle3 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),0);
@@ -121,7 +121,7 @@ public class Container{
 		}if(circle5.getWidth()>circle6.getWidth()){
 			circle5.width+=r;
 			circle6.width+=(r+circle1.width/1500);
-			rpaint3.setAlpha(rpaint3.getAlpha()-5);
+			rpaint3.setAlpha(rpaint3.getAlpha()-2);
 		}
 		else if(!hasReady){
 			circle5 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),0);

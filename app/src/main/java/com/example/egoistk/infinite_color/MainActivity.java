@@ -10,6 +10,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Button btn_gallery, btn_about;
+    private MainLaunchView mainLaunchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);//隐藏标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
         setContentView(R.layout.activity_main);
-
+        mainLaunchView = (MainLaunchView)findViewById(R.id.mainLaunch);
         btn_gallery  = (Button) findViewById(R.id.btn_gallery);
         btn_about    = (Button) findViewById(R.id.btn_about);
         btn_gallery.setOnClickListener(this);
@@ -28,6 +29,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        MainLaunchView.BombThread bombThread = mainLaunchView.new BombThread(mainLaunchView);
+        new Thread(bombThread).start();//小圆圈开始爆炸
+        //等待2秒动画
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(2000);
+                }catch (Exception e){
+                   Thread.currentThread().interrupt();
+                }
+            }
+        }).start();
+        //跳转界面
         switch (v.getId()) {
             case R.id.btn_gallery:
                 startActivity(new Intent(MainActivity.this, GalleryActivity.class));

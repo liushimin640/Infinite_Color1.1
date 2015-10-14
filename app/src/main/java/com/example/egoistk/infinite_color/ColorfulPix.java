@@ -171,8 +171,8 @@ public class ColorfulPix extends Container{
 	}
 
 	public void move(){
-		x = (x + 10 * cos / r);
-		y = (y + 10 * sin / r);
+		x = (x + 5 * cos / r);
+		y = (y + 5 * sin / r);
 	}
 
 	public void rebound(boolean shouldChgCos,boolean shouldChgSin){
