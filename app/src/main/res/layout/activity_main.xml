@@ -14,19 +14,12 @@
         android:layout_height="fill_parent">
     </com.example.egoistk.infinite_color.MainLaunchView>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/infinite"
-        android:id="@+id/btn_infinite"
-        android:layout_gravity="center"
-        android:layout_marginBottom="100dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/color"
-        android:id="@+id/btn_color"
+        android:id="@+id/btn_gallery"
         android:layout_gravity="center" />
 
     <Button
