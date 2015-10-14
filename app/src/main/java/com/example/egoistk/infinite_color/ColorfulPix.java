@@ -86,13 +86,25 @@ public class ColorfulPix extends Container{
 			if(y < 0 + c1.width|| y > parent.height - c1.width){
 				rebound(false, true);
 			}
-			move();
-			if(parent.circle1.getWidth()*parent.circle1.getWidth() >= ((x-parent.circle1.x)*(x-parent.circle1.x)+(y-parent.circle1.y)*(y-parent.circle1.y))){
-				new Thread(new ChangeColorThread(parent.rpaint.getColor())).start();
+			if(inCircle(parent.circle1)&&!inCircle(parent.circle2)&&!inCircle(parent.circle3)){
+				paint.setColor(parent.rpaint1.getColor());
+				paint.setAlpha(255);
 			}
+			if(inCircle(parent.circle2)&&!inCircle(parent.circle3)){
+				paint.setColor(parent.rpaint2.getColor());
+				paint.setAlpha(255);
+			}
+			if(inCircle(parent.circle3)){
+				paint.setColor(parent.rpaint3.getColor());
+				paint.setAlpha(255);
+			}
+			move();
 		}
 	}
 
+	public boolean inCircle(Circle bc){
+		return (bc.getWidth()*bc.getWidth() >= ((x - bc.x)*(x - bc.x)+(y-bc.y)*(y-bc.y)));
+	}
 
 	public class ChangeColorThread implements Runnable{
 		public int color;
@@ -159,8 +171,8 @@ public class ColorfulPix extends Container{
 	}
 
 	public void move(){
-		x = (x + 20 * cos / r);
-		y = (y + 20 * sin / r);
+		x = (x + 10 * cos / r);
+		y = (y + 10 * sin / r);
 	}
 
 	public void rebound(boolean shouldChgCos,boolean shouldChgSin){

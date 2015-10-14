@@ -14,20 +14,33 @@ public class Container{
 	public float x ,y ,width ,height ;
 
 	public String className;
-	public Paint rpaint;
+	public Paint rpaint1;
+	public Paint rpaint2;
+	public Paint rpaint3;
+
 	public Paint wpaint;
 	public Circle circle1,circle2;
+	public Circle circle3,circle4;
+	public Circle circle5,circle6;
 
 
 
 	public Container() {
 		children = new CopyOnWriteArrayList<ColorfulPix>();
-		rpaint = new Paint();
+		rpaint1 = new Paint();
+		rpaint2 = new Paint();
+		rpaint3 = new Paint();
 		wpaint = new Paint();
 		wpaint.setColor(Color.WHITE);
-		rpaint.setColor((int)(Math.random()*0x88888888));
+		rpaint1.setColor((int)(Math.random()*0x88888888));
+		rpaint2.setColor((int)(Math.random()*0x88888888));
+		rpaint3.setColor((int)(Math.random()*0x88888888));
 		circle1 = new Circle((float)(Math.random()*getWidth()),(float)(Math.random()*getHeight()),0);
 		circle2 = new Circle(circle1.getX(),circle1.getY(),-20);
+		circle3 = new Circle((float)(Math.random()*getWidth()),(float)(Math.random()*getHeight()),0);
+		circle4 = new Circle(circle3.getX(),circle3.getY(),-20);
+		circle5 = new Circle((float)(Math.random()*getWidth()),(float)(Math.random()*getHeight()),0);
+		circle6 = new Circle(circle5.getX(),circle5.getY(),-20);
 		parent = null;
 		className = null;
 	}
@@ -57,8 +70,12 @@ public class Container{
 		System.out.println("画布restore完毕");
 	}
 	public void costomChildren(Canvas canvas){
-		canvas.drawCircle(circle1.getX(), circle1.getY(), circle1.getWidth(), rpaint);
+		canvas.drawCircle(circle1.getX(), circle1.getY(), circle1.getWidth(), rpaint1);
 		canvas.drawCircle(circle2.getX(), circle2.getY(), circle2.getWidth(), wpaint);
+		canvas.drawCircle(circle3.getX(), circle3.getY(), circle3.getWidth(), rpaint2);
+		canvas.drawCircle(circle4.getX(), circle4.getY(), circle4.getWidth(), wpaint);
+		canvas.drawCircle(circle5.getX(), circle5.getY(), circle5.getWidth(), rpaint3);
+		canvas.drawCircle(circle6.getX(), circle6.getY(), circle6.getWidth(), wpaint);
 	}
 	public void addChild(ColorfulPix child){
 		children.add(child);
@@ -78,21 +95,41 @@ public class Container{
 		height += dY;
 	}
 
-	public boolean circleMove(int r){
+	public boolean circleMove(int r,boolean hasReady){
 
-		if(circle1.getWidth()>circle2.getWidth()-(float)(Math.random()*200)){
+		if(circle1.getWidth()>circle2.getWidth()){
 			circle1.width+=r;
 			circle2.width+=(r+circle1.width/1500);
-			rpaint.setAlpha(rpaint.getAlpha()-7);
+			rpaint1.setAlpha(rpaint1.getAlpha()-5);
 		}
-		else{
+		else if(!hasReady){
 			circle1 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),0);
-			rpaint.setColor((int)(circle1.x/width*circle1.y/height*0x00888888)+0xff666666);
+			rpaint1.setColor((int) (circle1.x / width * circle1.y / height * 0x00888888) + 0xff444444);
+			rpaint1.setAlpha(255);
 			circle2 = new Circle(circle1.getX(),circle1.getY(),-20);
-
-
 		}
-		return(circle1.getWidth()<circle2.getWidth());
+		if(circle3.getWidth()>circle4.getWidth()){
+			circle3.width+=r;
+			circle4.width+=(r+circle1.width/1500);
+			rpaint2.setAlpha(rpaint2.getAlpha()-5);
+		}
+		else if(!hasReady){
+			circle3 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),0);
+			rpaint2.setColor((int)(circle3.x/width*circle3.y/height*0x00888888)+0xff444444);
+			rpaint2.setAlpha(255);
+			circle4 = new Circle(circle3.getX(),circle3.getY(),-20);
+		}if(circle5.getWidth()>circle6.getWidth()){
+			circle5.width+=r;
+			circle6.width+=(r+circle1.width/1500);
+			rpaint3.setAlpha(rpaint3.getAlpha()-5);
+		}
+		else if(!hasReady){
+			circle5 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),0);
+			rpaint3.setColor((int)(circle5.x/width*circle5.y/height*0x00888888)+0xff444444);
+			rpaint3.setAlpha(255);
+			circle6 = new Circle(circle5.getX(),circle5.getY(),-20);
+		}
+		return(circle3.getWidth()<circle4.getWidth()&&circle1.getWidth()<circle2.getWidth()&&circle5.getWidth()<circle6.getWidth());
 	}
 
 	public void setX(float x) {

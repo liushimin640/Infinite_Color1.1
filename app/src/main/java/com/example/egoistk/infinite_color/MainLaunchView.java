@@ -117,7 +117,7 @@ public class MainLaunchView extends LaunchView{
 					hasReady = true;
 				}
 
-				root.circleMove(50);
+				root.circleMove(25,hasReady);
 
 				System.out.println("加载完成");
 				draw();
@@ -133,9 +133,9 @@ public class MainLaunchView extends LaunchView{
 
 			while(hasReady){
 				long before = System.currentTimeMillis();
-
-				if(root.children.size() == 0&&root.circleMove(100))
+				if(root.circleMove(50,hasReady)){
 					hasReady = false;
+				}
 				draw();
 				try{
 					Thread.sleep(1000/30-(System.currentTimeMillis()-before));
