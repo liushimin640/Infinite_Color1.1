@@ -14,21 +14,26 @@
         android:layout_height="fill_parent">
     </com.example.egoistk.infinite_color.MainLaunchView>
 
+//ImageButton素材地址
+//http://www.easyicon.net/iconsearch/iconset:windows8-metro-style-icons/1/
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:src="@drawable/gallery"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:text="@string/color"
-        android:id="@+id/btn_gallery"
-        android:layout_gravity="center" />
+        android:id="@+id/ibtn_gallery"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="340dp"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:src="@drawable/about"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:text="@string/about"
-        android:id="@+id/btn_about"
-        android:layout_gravity="center"
-        android:layout_marginTop="100dp"/>
+        android:id="@+id/ibtn_about"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="440dp"/>
 
 
 </FrameLayout>

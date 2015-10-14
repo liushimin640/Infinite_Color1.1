@@ -5,11 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button btn_gallery, btn_about;
+    private ImageButton ibtn_gallery, ibtn_about;
     private MainLaunchView mainLaunchView;
 
     @Override
@@ -19,10 +19,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
         setContentView(R.layout.activity_main);
         mainLaunchView = (MainLaunchView)findViewById(R.id.mainLaunch);
-        btn_gallery  = (Button) findViewById(R.id.btn_gallery);
-        btn_about    = (Button) findViewById(R.id.btn_about);
-        btn_gallery.setOnClickListener(this);
-        btn_about.setOnClickListener(this);
+        ibtn_gallery  = (ImageButton) findViewById(R.id.ibtn_gallery);
+        ibtn_about    = (ImageButton) findViewById(R.id.ibtn_about);
+        ibtn_gallery.setOnClickListener(this);
+        ibtn_about.setOnClickListener(this);
 
 
     }
@@ -44,10 +44,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }).start();
         //跳转界面
         switch (v.getId()) {
-            case R.id.btn_gallery:
+            case R.id.ibtn_gallery:
                 startActivity(new Intent(MainActivity.this, GalleryActivity.class));
                 break;
-            case R.id.btn_about:
+            case R.id.ibtn_about:
                 startActivity(new Intent(MainActivity.this, AboutActivity.class));
                 break;
 
