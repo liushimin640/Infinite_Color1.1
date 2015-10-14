@@ -1,11 +1,8 @@
 <resources>
-    <string name="app_name">Infinite_Color</string>
+    <string name="app_name">Infinite Color</string>
     <string name="about">关于</string>
-    <string name="infinite">无限</string>
     <string name="color">色彩</string>
 
-    <string name="title_activity_infinite">InfiniteActivity</string>
-    <string name="title_activity_color">ColorActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
