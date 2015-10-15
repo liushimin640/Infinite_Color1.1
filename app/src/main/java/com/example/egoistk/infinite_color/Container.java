@@ -31,6 +31,10 @@ public class Container{
 		rpaint2 = new Paint();
 		rpaint3 = new Paint();
 		wpaint = new Paint();
+		rpaint1.setAntiAlias(true);
+		rpaint2.setAntiAlias(true);
+		rpaint3.setAntiAlias(true);
+		wpaint.setAntiAlias(true);
 		wpaint.setColor(Color.WHITE);
 		rpaint1.setColor((int)(Math.random()*0x88888888));
 		rpaint2.setColor((int)(Math.random()*0x88888888));
@@ -55,19 +59,12 @@ public class Container{
 
 	public void draw(Canvas canvas){
 		canvas.save();
-		System.out.println("开始绘制root");
 		canvas.translate(getX(), getY());
-		System.out.println("root画布就位,开始绘制rootCircle");
 		costomChildren(canvas);
-		System.out.println("rootCircle绘制完毕，开始绘制child");
 		for(Container child : children){
-			System.out.println("启动了一个root。child的绘制");
 			child.draw(canvas);
-			System.out.println("完成了一个root.child");
 		}
-		System.out.println("画布开始restore");
 		canvas.restore();
-		System.out.println("画布restore完毕");
 	}
 	public void costomChildren(Canvas canvas){
 		canvas.drawCircle(circle1.getX(), circle1.getY(), circle1.getWidth(), rpaint1);
@@ -110,7 +107,7 @@ public class Container{
 		}
 		if(circle3.getWidth()>circle4.getWidth()){
 			circle3.width+=r;
-			circle4.width+=(r+circle1.width/1500);
+			circle4.width+=(r+circle3.width/1500);
 			rpaint2.setAlpha(rpaint2.getAlpha()-2);
 		}
 		else if(!hasReady){
@@ -120,7 +117,7 @@ public class Container{
 			circle4 = new Circle(circle3.getX(),circle3.getY(),-20);
 		}if(circle5.getWidth()>circle6.getWidth()){
 			circle5.width+=r;
-			circle6.width+=(r+circle1.width/1500);
+			circle6.width+=(r+circle5.width/1500);
 			rpaint3.setAlpha(rpaint3.getAlpha()-2);
 		}
 		else if(!hasReady){

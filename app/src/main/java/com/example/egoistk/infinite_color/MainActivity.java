@@ -3,6 +3,7 @@ package com.example.egoistk.infinite_color;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -11,7 +12,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ImageButton ibtn_gallery, ibtn_about;
     private MainLaunchView mainLaunchView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,26 +31,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         MainLaunchView.BombThread bombThread = mainLaunchView.new BombThread(mainLaunchView);
         new Thread(bombThread).start();//小圆圈开始爆炸
-        //等待2秒动画
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    Thread.sleep(2000);
-                }catch (Exception e){
-                   Thread.currentThread().interrupt();
-                }
-            }
-        }).start();
+        //启动跳转动画
+        new Thread(new Change4ClickThread(v)).start();
         //跳转界面
-        switch (v.getId()) {
-            case R.id.ibtn_gallery:
-                startActivity(new Intent(MainActivity.this, GalleryActivity.class));
-                break;
-            case R.id.ibtn_about:
-                startActivity(new Intent(MainActivity.this, AboutActivity.class));
-                break;
+    }
+
+    private class Change4ClickThread implements Runnable{
+        public View view;
+        public Change4ClickThread(View v) {
+            this.view = v;
+        }
+
+        @Override
+        public void run() {
+            mainLaunchView.setOnTouchListener(null);
+            ibtn_gallery.setOnClickListener(null);
+            ibtn_about.setOnClickListener(null);
+
+            while(!mainLaunchView.hasLoaded) {
+
+                /**线程等待**/
+                Thread.yield();
+            }
+            switch (view.getId()) {
+                case R.id.ibtn_gallery:
+                    startActivity(new Intent(MainActivity.this, GalleryActivity.class));
+                    break;
+                case R.id.ibtn_about:
+                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                    break;
+
+            }
+            ibtn_gallery.setOnClickListener(getMe());
+            ibtn_about.setOnClickListener(getMe());
 
         }
+    }
+    public MainActivity getMe(){
+        return this;
     }
 }

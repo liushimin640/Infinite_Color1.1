@@ -37,7 +37,7 @@ public class ColorfulPix extends Container{
 		c3 = new Circle(0,0,-20);
 		c4 = new Circle(0,0,0);
 		c5 = new Circle(0,0,20);
-
+		paint.setAntiAlias(true);
 		onActive = true;
 		onBomb = false;
 		sin = (float)Math.random() * 2 - 1;
@@ -50,18 +50,35 @@ public class ColorfulPix extends Container{
 	public void draw(Canvas canvas){
 
 		canvas.save();
-		System.out.println("开始绘制pix");
 		canvas.translate(getX(), getY());
-		System.out.println("pix画布就位,开始绘制pixCircle");
 		costomChildren(canvas);
-		System.out.println("pixCircle绘制完毕");
-
 		canvas.restore();
 	}
 
 	@Override
 	public void costomChildren(Canvas canvas) {
 		super.costomChildren(canvas);
+		if(onActive){
+			if(x < 0 + c1.width || x > parent.width - c1.width){
+				rebound(true, false);
+			}
+			if(y < 0 + c1.width|| y > parent.height - c1.width){
+				rebound(false, true);
+			}
+			if(inCircle(parent.circle1)&&!inCircle(parent.circle2)&&!inCircle(parent.circle3)){
+				paint.setColor(parent.rpaint1.getColor());
+				paint.setAlpha(255);
+			}
+			else if(inCircle(parent.circle2)&&!inCircle(parent.circle3)){
+				paint.setColor(parent.rpaint2.getColor());
+				paint.setAlpha(255);
+			}
+			else if(inCircle(parent.circle3)){
+				paint.setColor(parent.rpaint3.getColor());
+				paint.setAlpha(255);
+			}
+			move();
+		}
 		if(onActive) {
 			canvas.drawCircle(0, 0, c1.width, paint);
 		}
@@ -79,31 +96,10 @@ public class ColorfulPix extends Container{
 			canvas.drawCircle(0, 0, c1.getWidth(), paint);
 			paint.setAlpha(255);
 		}
-		if(onActive){
-			if(x < 0 + c1.width || x > parent.width - c1.width){
-				rebound(true, false);
-			}
-			if(y < 0 + c1.width|| y > parent.height - c1.width){
-				rebound(false, true);
-			}
-			if(inCircle(parent.circle1)&&!inCircle(parent.circle2)&&!inCircle(parent.circle3)){
-				paint.setColor(parent.rpaint1.getColor());
-				paint.setAlpha(255);
-			}
-			if(inCircle(parent.circle2)&&!inCircle(parent.circle3)){
-				paint.setColor(parent.rpaint2.getColor());
-				paint.setAlpha(255);
-			}
-			if(inCircle(parent.circle3)){
-				paint.setColor(parent.rpaint3.getColor());
-				paint.setAlpha(255);
-			}
-			move();
-		}
 	}
 
 	public boolean inCircle(Circle bc){
-		return (bc.getWidth()*bc.getWidth() >= ((x - bc.x)*(x - bc.x)+(y-bc.y)*(y-bc.y)));
+		return (bc.getWidth()*bc.getWidth() >= ((x - bc.x)*(x - bc.x) + (y - bc.y)*(y - bc.y)));
 	}
 
 	public class ChangeColorThread implements Runnable{

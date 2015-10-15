@@ -1,16 +1,12 @@
 package com.example.egoistk.infinite_color;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import java.util.Iterator;
 
@@ -36,6 +32,7 @@ public class MainLaunchView extends LaunchView{
 		setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
+
 				OnTouchView(event.getX(),event.getY());
 				hasLoaded = false;
 				return false;
@@ -56,6 +53,7 @@ public class MainLaunchView extends LaunchView{
 
 
 	public void Launch(){
+		System.out.println("新建了画面");
 		draw();
 		testBox();
 		root.circle1 = new Circle((float)(Math.random()*getWidth()),(float)(Math.random()*getHeight()),0);
@@ -68,6 +66,7 @@ public class MainLaunchView extends LaunchView{
 	}
 
 	public void pause(){
+		System.out.println("销毁了画面");
 		pixBox = new PixBox();
 		moveThread = new MoveThread();
 		td = new Thread(moveThread);
@@ -109,41 +108,40 @@ public class MainLaunchView extends LaunchView{
 
 		@Override
 		public void run() {
-			int flag = 1;
 			boolean hasReady = false;
 			while(!hasReady){
-				long before = System.currentTimeMillis();
-				System.out.println("开始加载");
-
+				long before = SystemClock.currentThreadTimeMillis();
 				if(root.children.size() == 0) {
 					hasReady = true;
 				}
-
-				root.circleMove(15,hasReady);
-
-				System.out.println("加载完成");
+				root.circleMove(15, hasReady);
 				draw();
-				System.out.println("绘制1帧");
-				try{
-					Thread.sleep(1000/30-(System.currentTimeMillis()-before));
-				}catch (Exception e) {
-					Thread.currentThread().interrupt();
+				long ago = SystemClock.currentThreadTimeMillis();
+				System.out.println("本次绘制耗时"+(ago-before));
+				while((int)(ago- before) <=1000/30) {
+					ago = SystemClock.currentThreadTimeMillis();
+					/**线程等待**/
+					Thread.yield();
 				}
+				System.out.println("一帧的时间是："+(SystemClock.currentThreadTimeMillis()-before));
 			}
-
-
-
 			while(hasReady){
-				long before = System.currentTimeMillis();
+				long before = SystemClock.currentThreadTimeMillis();
 				if(root.circleMove(100,hasReady)){
 					hasReady = false;
 				}
 				draw();
-				try{
-					Thread.sleep(1000/30-(System.currentTimeMillis()-before));
-				}catch (Exception e) {
-					Thread.currentThread().interrupt();
+				long ago = SystemClock.currentThreadTimeMillis();
+				System.out.println("本次绘制耗时" + (ago - before));
+				while((int)(ago- before) <=1000/30) {
+					ago = SystemClock.currentThreadTimeMillis();
+					/**线程等待**/
+
+					Thread.yield();
+
 				}
+
+				System.out.println("一帧的时间是："+(SystemClock.currentThreadTimeMillis()-before));
 			}
 		}
 	}
