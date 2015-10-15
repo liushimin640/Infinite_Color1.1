@@ -17,7 +17,6 @@ public class Container{
 	public Paint rpaint1;
 	public Paint rpaint2;
 	public Paint rpaint3;
-
 	public Paint wpaint;
 	public Circle circle1,circle2;
 	public Circle circle3,circle4;
@@ -49,8 +48,6 @@ public class Container{
 		className = null;
 	}
 
-
-
 	public CopyOnWriteArrayList<ColorfulPix> getChildren() {
 		return children;
 	}
@@ -80,16 +77,6 @@ public class Container{
 	}
 	public void removeChild(ColorfulPix child){
 		children.remove(child);
-	}
-
-
-
-	public void enlargeView(float dX,float dY){//enlarge this Container and lock every center locations of its children,but don't enlarge them.
-
-		/*x = rX - getWidth()/2.0 - dX/2.0;
-		y = rY - getHeight()/2.0 - dY/2.0;*/
-		width += dX;
-		height += dY;
 	}
 
 	public boolean circleMove(int r,boolean hasReady){

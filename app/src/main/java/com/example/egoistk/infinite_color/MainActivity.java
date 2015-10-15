@@ -18,11 +18,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);//隐藏标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
         setContentView(R.layout.activity_main);
+
         mainLaunchView = (MainLaunchView)findViewById(R.id.mainLaunch);
         ibtn_gallery  = (ImageButton) findViewById(R.id.ibtn_gallery);
         ibtn_about    = (ImageButton) findViewById(R.id.ibtn_about);
+        mainLaunchView.setOnClickListener(this);
         ibtn_gallery.setOnClickListener(this);
         ibtn_about.setOnClickListener(this);
+
 
 
     }
@@ -47,8 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mainLaunchView.setOnTouchListener(null);
             ibtn_gallery.setOnClickListener(null);
             ibtn_about.setOnClickListener(null);
+            //这里把onClickListener置空，防止连续点击；
 
-            while(!mainLaunchView.hasLoaded) {
+            while(!mainLaunchView.bombOver) {
 
                 /**线程等待**/
                 Thread.yield();
@@ -64,7 +68,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             ibtn_gallery.setOnClickListener(getMe());
             ibtn_about.setOnClickListener(getMe());
+            mainLaunchView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
 
+                    mainLaunchView.OnTouchView(event.getX(), event.getY());
+                    new Thread(mainLaunchView.new Change4ClickThread()).start();
+                    mainLaunchView.hasLoaded = false;
+                    return false;
+                }
+            });
         }
     }
     public MainActivity getMe(){

@@ -65,19 +65,18 @@ public class ColorfulPix extends Container{
 			if(y < 0 + c1.width|| y > parent.height - c1.width){
 				rebound(false, true);
 			}
-			if(inCircle(parent.circle1)&&!inCircle(parent.circle2)&&!inCircle(parent.circle3)){
-				paint.setColor(parent.rpaint1.getColor());
-				paint.setAlpha(255);
-			}
-			else if(inCircle(parent.circle2)&&!inCircle(parent.circle3)){
-				paint.setColor(parent.rpaint2.getColor());
-				paint.setAlpha(255);
+
+			move();
+			if(inCircle(parent.circle5)){
+				paint.setColor(parent.rpaint3.getColor());
 			}
 			else if(inCircle(parent.circle3)){
-				paint.setColor(parent.rpaint3.getColor());
-				paint.setAlpha(255);
+				paint.setColor(parent.rpaint2.getColor());
 			}
-			move();
+			else if(inCircle(parent.circle1)){
+				paint.setColor(parent.rpaint1.getColor());
+
+			}
 		}
 		if(onActive) {
 			canvas.drawCircle(0, 0, c1.width, paint);
@@ -99,21 +98,14 @@ public class ColorfulPix extends Container{
 	}
 
 	public boolean inCircle(Circle bc){
-		return (bc.getWidth()*bc.getWidth() >= ((x - bc.x)*(x - bc.x) + (y - bc.y)*(y - bc.y)));
+		int r = (int)bc.width;
+		int dx = (int) (bc.x - x);
+		int dy =(int )( bc.y - y);
+		boolean i = (r*r)>=(dx*dx+dy*dy);
+		System.out.println("inCircle:    "+(r*r)+"   和    "+(dx*dx+dy*dy));
+		return (i);
 	}
 
-	public class ChangeColorThread implements Runnable{
-		public int color;
-		public ChangeColorThread(int color) {
-			this.color = color;
-		}
-
-		@Override
-		public void run() {
-			paint.setColor(color);
-			paint.setAlpha(255);
-		}
-	}
 
 	public void drawOnBomb(int a){
 		new Thread(new DrawBombThread(a)).start();

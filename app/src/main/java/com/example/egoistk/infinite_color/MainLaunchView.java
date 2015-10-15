@@ -1,6 +1,7 @@
 package com.example.egoistk.infinite_color;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -20,8 +21,7 @@ public class MainLaunchView extends LaunchView{
 	private MoveThread moveThread;
 	private Thread td;
 	boolean hasLoaded;
-
-
+	boolean bombOver;
 
 
 	public MainLaunchView(Context context,AttributeSet attrs) {
@@ -34,6 +34,7 @@ public class MainLaunchView extends LaunchView{
 			public boolean onTouch(View v, MotionEvent event) {
 
 				OnTouchView(event.getX(),event.getY());
+				new Thread(new Change4ClickThread()).start();
 				hasLoaded = false;
 				return false;
 			}
@@ -48,9 +49,24 @@ public class MainLaunchView extends LaunchView{
 		if(hasLoaded){
 			new Thread(new BombThread(this)).start();
 		}
+
 	}
 
+	public class Change4ClickThread implements Runnable{
+		@Override
+		public void run() {
+			setOnTouchListener(null);
+			while(!bombOver) {
+				/**线程等待**/
+				Thread.yield();
+			}
+			start2Game(getContext());
+		}
+	}
 
+	public void start2Game(Context context){
+		context.startActivity(new Intent(context, GameActivity.class));
+	}
 
 	public void Launch(){
 		System.out.println("新建了画面");
@@ -63,6 +79,7 @@ public class MainLaunchView extends LaunchView{
 		}
 		td.start();
 		hasLoaded = true;
+		bombOver = false;
 	}
 
 	public void pause(){
@@ -75,6 +92,7 @@ public class MainLaunchView extends LaunchView{
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				OnTouchView(event.getX(),event.getY());
+				new Thread(new Change4ClickThread()).start();
 				hasLoaded = false;
 				return false;
 			}
@@ -101,6 +119,7 @@ public class MainLaunchView extends LaunchView{
 					Thread.currentThread().interrupt();
 				}
 			}
+			bombOver = true;
 		}
 	}
 
