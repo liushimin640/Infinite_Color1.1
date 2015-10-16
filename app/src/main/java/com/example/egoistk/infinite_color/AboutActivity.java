@@ -16,8 +16,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
         setContentView(R.layout.activity_about);
         mainLaunchView = (MainLaunchView)findViewById(R.id.mainLaunch);
-
-
+        mainLaunchView.setOnTouchListener(null);
 
     }
 
@@ -55,5 +54,15 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    @Override
+    protected void onPause() {
+        MainLaunchView.BombThread bombThread = mainLaunchView.new BombThread(mainLaunchView);
+        new Thread(bombThread).start();//小圆圈开始爆炸
+        while(!mainLaunchView.bombOver) {
+            /**线程等待**/
+            Thread.yield();
+        }
 
+        super.onPause();
+    }
 }

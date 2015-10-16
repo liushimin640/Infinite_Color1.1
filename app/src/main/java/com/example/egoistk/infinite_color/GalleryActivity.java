@@ -15,7 +15,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
         setContentView(R.layout.activity_gallery);
         mainLaunchView = (MainLaunchView) findViewById(R.id.mainLaunch);
-
+        mainLaunchView.setOnTouchListener(null);
 
     }
 
@@ -54,7 +54,16 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
 
 
-    public GalleryActivity getMe() {
-        return this;
+
+    @Override
+    protected void onPause() {
+        MainLaunchView.BombThread bombThread = mainLaunchView.new BombThread(mainLaunchView);
+        new Thread(bombThread).start();//小圆圈开始爆炸
+        while(!mainLaunchView.bombOver) {
+            /**线程等待**/
+            Thread.yield();
+        }
+
+        super.onPause();
     }
 }

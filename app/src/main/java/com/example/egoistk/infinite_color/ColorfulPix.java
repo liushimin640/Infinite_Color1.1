@@ -102,7 +102,6 @@ public class ColorfulPix extends Container{
 		int dx = (int) (bc.x - x);
 		int dy =(int )( bc.y - y);
 		boolean i = (r*r)>=(dx*dx+dy*dy);
-		System.out.println("inCircle:    "+(r*r)+"   和    "+(dx*dx+dy*dy));
 		return (i);
 	}
 

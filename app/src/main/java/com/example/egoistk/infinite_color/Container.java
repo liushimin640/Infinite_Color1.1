@@ -83,35 +83,35 @@ public class Container{
 
 		if(circle1.getWidth()>circle2.getWidth()){
 			circle1.width+=r;
-			circle2.width+=(r+circle1.width/1500);
+			circle2.width+=(r+circle1.width/1000);
 			rpaint1.setAlpha(rpaint1.getAlpha()-2);
 		}
 		else if(!hasReady){
-			circle1 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),0);
+			circle1 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),(float)((-20)*Math.random()));
 			rpaint1.setColor((int) (circle1.x / width * circle1.y / height * 0x00888888) + 0xff444444);
 			rpaint1.setAlpha(255);
-			circle2 = new Circle(circle1.getX(),circle1.getY(),-20);
+			circle2 = new Circle(circle1.getX(),circle1.getY(),circle1.getWidth()-(float)(10+10*Math.random()));
 		}
 		if(circle3.getWidth()>circle4.getWidth()){
 			circle3.width+=r;
-			circle4.width+=(r+circle3.width/1500);
+			circle4.width+=(r+circle3.width/1000);
 			rpaint2.setAlpha(rpaint2.getAlpha()-2);
 		}
 		else if(!hasReady){
-			circle3 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),0);
-			rpaint2.setColor((int)(circle3.x/width*circle3.y/height*0x00888888)+0xff444444);
+			circle3 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),(float)((-20)*Math.random()));
+			rpaint2.setColor((int) (circle3.x / width * circle3.y / height * 0x00888888) + 0xff444444);
 			rpaint2.setAlpha(255);
-			circle4 = new Circle(circle3.getX(),circle3.getY(),-20);
+			circle4 = new Circle(circle3.getX(),circle3.getY(),circle3.width-(float)(10+10*Math.random()));
 		}if(circle5.getWidth()>circle6.getWidth()){
 			circle5.width+=r;
-			circle6.width+=(r+circle5.width/1500);
+			circle6.width+=(r+circle5.width/1000);
 			rpaint3.setAlpha(rpaint3.getAlpha()-2);
 		}
 		else if(!hasReady){
-			circle5 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),0);
-			rpaint3.setColor((int)(circle5.x/width*circle5.y/height*0x00888888)+0xff444444);
+			circle5 = new Circle((float)(Math.random()*width),(float)(Math.random()*height),(float)((-20)*Math.random()));
+			rpaint3.setColor((int) (circle5.x / width * circle5.y / height * 0x00888888) + 0xff444444);
 			rpaint3.setAlpha(255);
-			circle6 = new Circle(circle5.getX(),circle5.getY(),-20);
+			circle6 = new Circle(circle5.getX(),circle5.getY(),circle5.width-(float)(10+10*Math.random()));
 		}
 		return(circle3.getWidth()<circle4.getWidth()&&circle1.getWidth()<circle2.getWidth()&&circle5.getWidth()<circle6.getWidth());
 	}
