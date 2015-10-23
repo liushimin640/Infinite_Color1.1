@@ -1,4 +1,4 @@
-package com.example.egoistk.infinite_color;
+package com.example.egoistk.infinite_color.Launch;
 
 import android.graphics.Paint;
 

@@ -8,32 +8,10 @@
     android:background="#e3e3e3">
 
 
-    <com.example.egoistk.infinite_color.MainLaunchView
-        android:id="@+id/mainLaunch"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-    </com.example.egoistk.infinite_color.MainLaunchView>
 
 //ImageButton素材地址
 //http://www.easyicon.net/iconsearch/iconset:windows8-metro-style-icons/1/
 
-    <ImageButton
-        android:src="@drawable/gallery"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:text="@string/color"
-        android:id="@+id/ibtn_gallery"
-        android:layout_marginLeft="250dp"
-        android:layout_marginTop="340dp"/>
-
-    <ImageButton
-        android:src="@drawable/about"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:text="@string/about"
-        android:id="@+id/ibtn_about"
-        android:layout_marginLeft="250dp"
-        android:layout_marginTop="440dp"/>
 
 
 </FrameLayout>

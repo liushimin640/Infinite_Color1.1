@@ -1,16 +1,12 @@
-package com.example.egoistk.infinite_color;
+package com.example.egoistk.infinite_color.Launch;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
-import android.provider.Settings;
-
-import java.util.logging.XMLFormatter;
 
 /**
  * Created by liushimin on 15/10/11.
  */
-public class ColorfulPix extends Container{
+public class ColorfulPix extends LaunchContainer {
 	private Paint paint;
 	private int color;
 	public boolean onActive;
@@ -18,7 +14,7 @@ public class ColorfulPix extends Container{
 	public String className ;
 	public ColorfulPix me;
 	private DrawBombThread dbThread = null;
-
+	public LaunchContainer parent;
 	private float cos,sin,r;
 	public Circle c1,c2,c3,c4,c5;
 
@@ -38,6 +34,7 @@ public class ColorfulPix extends Container{
 		c4 = new Circle(0,0,0);
 		c5 = new Circle(0,0,20);
 		paint.setAntiAlias(true);
+		
 		onActive = true;
 		onBomb = false;
 		sin = (float)Math.random() * 2 - 1;
@@ -46,18 +43,17 @@ public class ColorfulPix extends Container{
 		me = this;
 	}
 
-	@Override
 	public void draw(Canvas canvas){
 
 		canvas.save();
-		canvas.translate(getX(), getY());
+		canvas.translate(this.getX(), this.getY());
 		costomChildren(canvas);
 		canvas.restore();
 	}
 
 	@Override
 	public void costomChildren(Canvas canvas) {
-		super.costomChildren(canvas);
+
 		if(onActive){
 			if(x < 0 + c1.width || x > parent.width - c1.width){
 				rebound(true, false);
@@ -65,16 +61,15 @@ public class ColorfulPix extends Container{
 			if(y < 0 + c1.width|| y > parent.height - c1.width){
 				rebound(false, true);
 			}
-
-			move();
-			if(inCircle(parent.circle5)){
-				paint.setColor(parent.rpaint3.getColor());
+			this.move();
+			if(inCircle(this.parent.circle5)){
+				this.paint.setColor(this.parent.rpaint3.getColor());
 			}
-			else if(inCircle(parent.circle3)){
-				paint.setColor(parent.rpaint2.getColor());
+			else if(inCircle(this.parent.circle3)){
+				this.paint.setColor(this.parent.rpaint2.getColor());
 			}
-			else if(inCircle(parent.circle1)){
-				paint.setColor(parent.rpaint1.getColor());
+			else if(inCircle(this.parent.circle1)){
+				this.paint.setColor(this.parent.rpaint1.getColor());
 
 			}
 		}
@@ -106,22 +101,18 @@ public class ColorfulPix extends Container{
 	}
 
 
-	public void drawOnBomb(int a){
-		new Thread(new DrawBombThread(a)).start();
+	public void drawOnBomb(){
+		new Thread(new DrawBombThread()).start();
 	}
 
 
 	public class DrawBombThread implements Runnable {
-			int a;
-		public DrawBombThread(int a) {
-			this.a = a;
-		}
 
 		@Override
 		public void run() {
 			while (c5.width <= 100){
 				try{
-					Thread.sleep(10);
+					Thread.sleep(500/30);
 				}catch (Exception e) {
 					Thread.currentThread().interrupt();
 				}
@@ -132,7 +123,7 @@ public class ColorfulPix extends Container{
 			}
 			while (c5.width >= 0) {
 				try {
-					Thread.sleep(10);
+					Thread.sleep(500/30);
 				} catch (Exception e) {
 					Thread.currentThread().interrupt();
 				}
@@ -142,7 +133,7 @@ public class ColorfulPix extends Container{
 				c2.width-=5;
 				c1.width-=5;
 			}
-			parent.removeChild(me);
+			parent.removePixChild(me);
 		}
 
 	}
@@ -158,8 +149,8 @@ public class ColorfulPix extends Container{
 	}
 
 	public void move(){
-		x = (x + 5 * cos / r);
-		y = (y + 5 * sin / r);
+		this.x = (this.x + 5 * cos / r);
+		this.y = (this.y + 5 * sin / r);
 	}
 
 	public void rebound(boolean shouldChgCos,boolean shouldChgSin){

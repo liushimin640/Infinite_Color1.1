@@ -1,11 +1,7 @@
 package com.example.egoistk.infinite_color;
 
-import android.util.ArraySet;
+import com.example.egoistk.infinite_color.Launch.ColorfulPix;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
